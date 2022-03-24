@@ -326,7 +326,6 @@ class BlackJackGame(object):
         for player in self.dropped_out:
             if player.cash == 0:
                 print("До свидания,"+str(player.name)+", в другой раз повезет!")
-        # прекращение игры, если за столом не осталось игроков
 
 
 def main():
@@ -342,6 +341,7 @@ def main():
     again = None
     while again != "n":
         game.play()
+        # прекращение игры, если за столом не осталось игроков
         if not game.players:
             print("="*70)
             print("="*70)
