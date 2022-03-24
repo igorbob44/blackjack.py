@@ -210,7 +210,7 @@ class BlackJackGame(object):
         self.remaining_players = []
         self.players = []
         for name in names:
-            cash_pl = games.ask_number(f"{name}, cколько денег в вашем распоряжении? (от 1 до 100): ", low=20, high=301)
+            cash_pl = games.ask_number(f"{name}, cколько денег в вашем распоряжении? (от 1 до 300): ", low=20, high=301)
             player = BlackJackPlayer(name, cash=cash_pl)
             self.players.append(player)
         self.dealer = BlackJackDealer("Dealer", self.add_cash)
@@ -246,6 +246,7 @@ class BlackJackGame(object):
 
     def play(self):
         # проверка колоды
+        CARDS_IN_HAND = 2
         if len(self.deck.cards) <= 30:
             print("*" * 50)
             print("В колоде осталось " + str(len(self.deck.cards)) + " карт.")
@@ -257,7 +258,7 @@ class BlackJackGame(object):
             print("В колоде теперь " + str(len(self.deck.cards)) + " карт.")
             print("*" * 50)
         # сдача всем по 2 карты
-        self.deck.deal(self.players + [self.dealer], per_hand=2)  # каждому игроку и дилеру здаются по 2 карты
+        self.deck.deal(self.players + [self.dealer], CARDS_IN_HAND)  # каждому игроку и дилеру здаются по 2 карты
         self.dealer.flip_first_card()  # первая из карт, сданных дилеру, переворачивается рубашкой вверх
         for player in self.players:  # список игроков и набранных ими значений демонстрируется на экране
             print("-" * 50)
@@ -330,8 +331,10 @@ class BlackJackGame(object):
 
 def main():
     print("\t\tДобро пожаловать за игровой стол Блек-джека!\n")
+    LOW_PL = 1
+    HIGH_PL = 8
     names = []
-    number = games.ask_number("Сколько всего игроков? (1-7): ", low=1, high=8)
+    number = games.ask_number("Сколько всего игроков? (1-7): ", LOW_PL, HIGH_PL)
     for i in range(number):
         name = input("Введите имя игрока: ")
         names.append(name)
