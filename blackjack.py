@@ -97,13 +97,18 @@ class BlackJackPlayer(BlackJackHand):
     def bet(self):
         if not self.is_bet:
             while True:
+                # if self.cash > 0
                 try:
                     bet_size = int(input(
                         "\n" + "*" * 50 + "\n" + self.name + "\t(" + str(self.total) + ").  Какова ваша ставка? "))
-                    self.is_bet = True
-                    self.player_bet += bet_size
-                    self.cash -= self.player_bet
-                    return bet_size
+                    if bet_size > self.cash:
+                        print(f"У вас нет {bet_size}, чтобы поставить такую ставку. У вас всего: ", self.cash)
+                        continue
+                    else:
+                        self.is_bet = True
+                        self.player_bet += bet_size
+                        self.cash -= self.player_bet
+                        return bet_size
                 except:
                     print("Введите, пожалуйста, число, а не текст.")
         else:
@@ -341,8 +346,7 @@ def main():
     again = None
     while again != "n":
         game.play()
-        # прекращение игры, если за столом не осталось игроков
-        if not game.players:
+        if not game.players:   # прекращение игры, если за столом не осталось игроков
             print("="*70)
             print("="*70)
             print("\tК сожалению, за столом не осталось игроков.")
