@@ -25,7 +25,7 @@ class War_card(cards.Card):
 
 
 class War_deck(cards.Deck):
-    """Колода для игры в 'Война'"""
+    """Колода для игры 'Война'"""
 
     def populate(self):
         for suit in War_card.SUITS:
@@ -34,7 +34,7 @@ class War_deck(cards.Deck):
 
 
 class War_hand(cards.Hand):
-    """Рука игрока в игру 'Война'"""
+    """Рука игрока в игре 'Война'"""
 
     def __init__(self, name):
         super(War_hand, self).__init__()
@@ -61,10 +61,10 @@ class War_hand(cards.Hand):
         for card in self.cards:
             if card.value == War_card.ACE_VALUE:
                 contains_ace = True
-        # если на руках есть туз и сумма очков не превышает 11, будем считать туз за 11 очков
+        # если на руках есть туз и сумма очков не превышает 15, будем считать туз за 14 очков
         if contains_ace and t <= 15:
-            # прибавить нужно лишь 10, потому что единица уже вошла в общую сумму
-            t += 14
+            # прибавить нужно лишь 13, потому что единица уже вошла в общую сумму
+            t += 13
         return t
 
 
@@ -84,23 +84,11 @@ class War_player(War_hand):
         print("=" * 70)
 
 
-class War_dealer(War_hand):
-    """ Дилер в игре "Блек-джек". """
-
-    def flip_first_card(self):
-        if self.cards:
-            first_card = self.cards[0]
-            first_card.flip()
-        else:
-            print("<нет карт>")
-
-
 class War_game(object):
-    """ Игра в Блек-джек. """
+    """ Игра "Война". """
 
     def __init__(self, names):
         self.players = []
-        # self.dealer = War_dealer("Dealer")
         for name in names:
             player = War_player(name)
             self.players.append(player)
@@ -134,10 +122,9 @@ class War_game(object):
             print("-" * 50)
             print(player)
             print("-" * 50)
-        # сравниваем суммы очков у дилера и у игроков, оставшихся в игре
+        # сравниваем суммы очков у игроков
         vin = 0
         ravno = 0
-        not_bad = 0
         for player in self.players:
             for caunt in self.players:
                 if player.total < caunt.total:
@@ -145,12 +132,8 @@ class War_game(object):
                 elif player.total == caunt.total:
                     ravno += 1
                 else:
-                    not_bad += 1
-            if vin == 0 and ravno == 0:
-                player.win()
-                vin = 0
-                ravno = 0
-            elif vin == 0 and ravno >= 0:
+                    print("Что-то пошло не так.")
+            if vin == 0 and ravno >= 0:
                 player.win()
                 vin = 0
                 ravno = 0
@@ -166,10 +149,9 @@ class War_game(object):
                 vin = 0
                 ravno = 0
                 print("не определено")
-        # удаление всех карт
+        # удаление всех карт у игроков
         for player in self.players:
             player.clear()
-        # self.dealer.clear()
 
 
 def main():
@@ -185,14 +167,6 @@ def main():
     again = None
     while again != "n":
         game.play()
-        # if not game.players:  # прекращение игры, если за столом не осталось игроков
-        #     print("=" * 70)
-        #     print("=" * 70)
-        #     print("\tК сожалению, за столом не осталось игроков.")
-        #     print("\tДилер вынужден прекратить игру. До скорой встречи.")
-        #     print("=" * 70)
-        #     print("=" * 70)
-        #     break
         again = games.ask_yes_no("\nХотите сыграть ещё раз? ")
 
 
