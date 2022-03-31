@@ -106,7 +106,7 @@ class War_game(object):
     def play(self):
         # проверка колоды
         CARDS_IN_HAND = 1
-        if len(self.deck.cards) <= 30:
+        if len(self.deck.cards) <= 45:
             print("*" * 50)
             print("В колоде осталось " + str(len(self.deck.cards)) + " карт.")
             print("Идёт перетасовка колоды...")
@@ -125,6 +125,7 @@ class War_game(object):
         # сравниваем суммы очков у игроков
         vin = 0
         ravno = 0
+        bag = 0
         for player in self.players:
             for caunt in self.players:
                 if player.total < caunt.total:
@@ -132,7 +133,7 @@ class War_game(object):
                 elif player.total == caunt.total:
                     ravno += 1
                 else:
-                    print("Что-то пошло не так.")
+                    bag +=1
             if vin == 0 and ravno >= 0:
                 player.win()
                 vin = 0
