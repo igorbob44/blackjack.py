@@ -71,10 +71,6 @@ class War_hand(cards.Hand):
 class War_player(War_hand):
     """ Игрок в игре "Война". """
 
-    def bust(self):
-        print(self.name, "перебрал.")
-        self.lose()
-
     def lose(self):
         print("=" * 70)
         print(self.name, "проиграл.")
@@ -82,25 +78,14 @@ class War_player(War_hand):
 
     def win(self):
         print("=" * 70)
-        print(self.name, "выйграл.")
-        print("=" * 70)
-
-    def push(self):
-        print("=" * 70)
-        print(self.name, "сыграл с компьютером вничью.")
+        print("." * 70)
+        print(self.name, "|"*20+"ВЫИГРАЛ!"+"|"*20)
+        print("." * 70)
         print("=" * 70)
 
 
 class War_dealer(War_hand):
     """ Дилер в игре "Блек-джек". """
-
-    def is_hitting(self):
-        return self.total < 17
-
-    def bust(self):
-        print("-" * 70)
-        print(self.name, "перебрал.")
-        print("-" * 70)
 
     def flip_first_card(self):
         if self.cards:
@@ -115,7 +100,7 @@ class War_game(object):
 
     def __init__(self, names):
         self.players = []
-        self.dealer = War_dealer("Dealer")
+        # self.dealer = War_dealer("Dealer")
         for name in names:
             player = War_player(name)
             self.players.append(player)
@@ -150,18 +135,40 @@ class War_game(object):
             print(player)
             print("-" * 50)
         # сравниваем суммы очков у дилера и у игроков, оставшихся в игре
+        vin = 0
+        ravno = 0
+        not_bad = 0
         for player in self.players:
             for caunt in self.players:
-                if player.total > caunt.total:
-                    player.win()
-                    print(f"{player.name} имеет наибольшее количество очков:", player.total)
+                if player.total < caunt.total:
+                    vin += 1
+                elif player.total == caunt.total:
+                    ravno += 1
                 else:
-                    player.lose()
-                    print(f"{player.name} набрал только {player.total} очков.")
-        input("\nНажмите Enter, чтобы продолжить.")
+                    not_bad += 1
+            if vin == 0 and ravno == 0:
+                player.win()
+                vin = 0
+                ravno = 0
+            elif vin == 0 and ravno >= 0:
+                player.win()
+                vin = 0
+                ravno = 0
+            elif vin > 0 and ravno >= 0:
+                player.lose()
+                vin = 0
+                ravno = 0
+            elif vin > 0 and ravno == 0:
+                player.lose()
+                vin = 0
+                ravno = 0
+            else:
+                vin = 0
+                ravno = 0
+                print("не определено")
         # удаление всех карт
-        # for player in self.players:
-        #     player.clear()
+        for player in self.players:
+            player.clear()
         # self.dealer.clear()
 
 
